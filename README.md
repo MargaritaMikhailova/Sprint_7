@@ -21,10 +21,10 @@
 pytest tests/ -v
 
 #### Запуск конкретного теста
-pytest tests/test_check_orders.py -v
-pytest tests/test_create_courier.py -v
-pytest tests/test_create_order.py -v
-pytest tests/test_login_courier.py -v
+- pytest tests/test_check_orders.py -v
+- pytest tests/test_create_courier.py -v
+- pytest tests/test_create_order.py -v
+- pytest tests/test_login_courier.py -v
 
 #### Открытие отчёта
 allure open target/allure-report
