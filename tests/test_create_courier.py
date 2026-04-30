@@ -5,9 +5,9 @@ import random
 import string
 import allure
 
-from data import Urls
+from API_base import UserApi
 from error_message import ErrorMessage
-
+from conftest import courier
 
 class TestCreateCourier:
 
@@ -20,43 +20,44 @@ class TestCreateCourier:
 
     @allure.title('Проверка, что нельзя создать двух одинаковых курьеров')
     def test_create_same_courier_conflict(self, courier):
-        payload = {
-            "login": courier["login"],
-            "password": courier["password"],
-            "firstName": courier["firstName"],
-        }
-        response_duplicate = requests.post(f"{Urls.MAIN_URL}/api/v1/courier", json=payload, timeout=10)
+        response_duplicate = UserApi.create_courier(
+            login=courier["login"],
+            password=courier["password"],
+            first_name=courier["firstName"],
+        )
 
         assert response_duplicate.status_code == 409
         assert response_duplicate.json()['message'] == ErrorMessage.LOGIG_ALERADY_EXIST
 
     @allure.title('Проверка, что если нету пароля, запрос возвращает ошибку')
-    def test_create_courier_missing_password(self):
+    def test_create_courier_missing_password(self, courier):
+        response = UserApi.create_courier(
+            login=courier["login"],
+            password="",
+            first_name=courier["firstName"],
+        )
 
-        response = requests.post(f"{Urls.MAIN_URL}/api/v1/courier", json={
-            "login": "testRita123",
-            "firstName": "Margarita"
-
-        })
         assert response.status_code == 400
         assert response.json()['message'] == ErrorMessage.LOGIN_NOT_ENOUGH
 
     @allure.title('Проверка, что если нету логина, запрос возвращает ошибку')
-    def test_create_courier_missing_login(self):
-        response = requests.post(f"{Urls.MAIN_URL}/api/v1/courier", json={
-            "password": "Aa12345",
-            "firstName": "Margarita"
+    def test_create_courier_missing_login(self, courier):
+        response = UserApi.create_courier(
+            login="",
+            password=courier["password"],
+            first_name=courier["firstName"],
+        )
 
-        })
         assert response.status_code == 400
         assert response.json()['message'] == ErrorMessage.LOGIN_NOT_ENOUGH
 
     @allure.title('Проверка, что если нету пароля, запрос возвращает ошибку')
-    def test_create_courier_missing_login_password(self):
-        response = requests.post(f"{Urls.MAIN_URL}/api/v1/courier", json={
+    def test_create_courier_missing_login_password(self, courier):
+        response = UserApi.create_courier(
+            login="",
+            password="",
+            first_name=courier["firstName"],
+        )
 
-            "firstName": "Margarita"
-
-        })
         assert response.status_code == 400
         assert response.json()['message'] == ErrorMessage.LOGIN_NOT_ENOUGH
