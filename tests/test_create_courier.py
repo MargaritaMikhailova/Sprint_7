@@ -6,22 +6,17 @@ import string
 import allure
 
 from data import Urls
-from conftest import _random_string, create_courier
 from error_message import ErrorMessage
 
 
 class TestCreateCourier:
 
     @allure.title('Проверка, что курьера можно создать')
-    def test_create_courier_successful(self):
-        login = _random_string()
-        password = _random_string()
-        first_name = _random_string()
+    def test_create_courier_successful(self, courier):
+        create_resp = courier["create_response"]
+        assert create_resp.status_code == 201
+        assert create_resp.json()["ok"] is True
 
-        response = create_courier(login=login, password=password, first_name=first_name)
-
-        assert response.status_code == 201
-        assert response.json()['ok'] is True
 
     @allure.title('Проверка, что нельзя создать двух одинаковых курьеров')
     def test_create_same_courier_conflict(self, courier):

@@ -21,6 +21,10 @@ def login_courier(*, login: str, password: str):
     return requests.post(f"{Urls.MAIN_URL}/api/v1/courier/login", json=payload, timeout=30)
 
 
+def delete_courier(*, courier_id: int):
+    return requests.delete(f"{Urls.MAIN_URL}/api/v1/courier/{courier_id}", timeout=30)
+
+
 def cancel_order(*, track: int):
     return requests.put(
         f"{Urls.MAIN_URL}/api/v1/orders/cancel",
@@ -38,13 +42,21 @@ def courier():
     create_resp = create_courier(login=login, password=password, first_name=first_name)
     assert create_resp.status_code == 201, create_resp.text
 
-    courier_data = {"login": login, "password": password, "firstName": first_name}
+    courier_data = {
+        "login": login,
+        "password": password,
+        "firstName": first_name,
+        "create_response": create_resp,
+    }
+    courier_id = None
+
     yield courier_data
 
     try:
         login_resp = login_courier(login=login, password=password)
-        courier_id = login_resp.json().get("id")
-        if courier_id is not None:
-            requests.delete(f"{Urls.MAIN_URL}/api/v1/courier/{courier_id}", timeout=30)
+        if login_resp.status_code == 200:
+            courier_id = login_resp.json().get("id")
     except Exception:
         pass
+    if courier_id is not None:
+        requests.delete(f"{Urls.MAIN_URL}/api/v1/courier/{courier_id}", timeout=30)
