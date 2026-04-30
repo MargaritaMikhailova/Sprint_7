@@ -28,7 +28,6 @@ def courier():
 
     yield courier_data
 
-    # best-effort cleanup: do not fail tests if service is flaky
     try:
         login_resp = UserApi.login_courier(login=login, password=password)
         if login_resp.status_code != 200:
@@ -36,6 +35,6 @@ def courier():
         courier_id = login_resp.json().get("id")
         if courier_id is None:
             return
-        OrderApi.delete_courier(courier_id=int(courier_id))
+        UserApi.delete_courier(courier_id=int(courier_id))
     except Exception:
         return

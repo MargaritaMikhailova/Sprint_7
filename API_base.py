@@ -1,29 +1,29 @@
 import requests
 
-from data import Urls
+from data import Urls, EndPoint
 
 
 class UserApi:
     @staticmethod
     def create_courier(*, login: str, password: str, first_name: str):
         payload = {"login": login, "password": password, "firstName": first_name}
-        return requests.post(f"{Urls.MAIN_URL}/api/v1/courier", json=payload, timeout=30)
+        return requests.post(f"{Urls.MAIN_URL}{EndPoint.COURIER}", json=payload, timeout=30)
 
     @staticmethod
     def login_courier(*, login: str, password: str):
         payload = {"login": login, "password": password}
-        return requests.post(f"{Urls.MAIN_URL}/api/v1/courier/login", json=payload, timeout=30)
+        return requests.post(f"{Urls.MAIN_URL}{EndPoint.COURIER_LOGIN}", json=payload, timeout=30)
 
     @staticmethod
     def delete_courier(*, courier_id: int):
-        return requests.delete(f"{Urls.MAIN_URL}/api/v1/courier/{courier_id}", timeout=30)
+        return requests.delete(f"{Urls.MAIN_URL}{EndPoint.COURIER}/{courier_id}", timeout=30)
 
 class OrderApi:
 
     @staticmethod
     def cancel_order(*, track: int):
         return requests.put(
-            f"{Urls.MAIN_URL}/api/v1/orders/cancel",
+            f"{Urls.MAIN_URL}{EndPoint.CANCEL_ORDER}",
             params={"track": track},
             timeout=30,
         )
@@ -52,9 +52,9 @@ class OrderApi:
             "comment": comment,
             "color": color,
         }
-        return requests.post(f"{Urls.MAIN_URL}/api/v1/orders", json=payload, timeout=30)
+        return requests.post(f"{Urls.MAIN_URL}{EndPoint.ORDER}", json=payload, timeout=30)
 
     @staticmethod
     def get_order():
-        return requests.get(f"{Urls.MAIN_URL}/api/v1/orders", timeout=30)
+        return requests.get(f"{Urls.MAIN_URL}{EndPoint.ORDER}", timeout=30)
 
