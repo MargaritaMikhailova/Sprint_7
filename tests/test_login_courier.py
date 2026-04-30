@@ -7,6 +7,7 @@ import allure
 
 from data import Urls
 from conftest import login_courier
+from error_message import ErrorMessage
 
 
 class TestLoginCourier:
@@ -28,7 +29,7 @@ class TestLoginCourier:
         )
 
         assert response_second.status_code == 400
-        assert response_second.json()['message'] == "Недостаточно данных для входа"
+        assert response_second.json()['message'] == ErrorMessage.INFORMATION_NOT_ENOUGH
 
     @allure.title('Проверка, что для авторизации нужно передать все обязательные поля, отсутствует логин')
     def test_login_courier_missing_login(self):
@@ -44,7 +45,7 @@ class TestLoginCourier:
             timeout=30,
         )
         assert response_second.status_code == 400
-        assert response_second.json()['message'] == "Недостаточно данных для входа"
+        assert response_second.json()['message'] == ErrorMessage.INFORMATION_NOT_ENOUGH
 
     @allure.title('Проверка, что если авторизоваться под несуществующим пользователем, запрос возвращает ошибку')
     def test_check_login_courier_not_exists(self):
@@ -52,7 +53,7 @@ class TestLoginCourier:
         response = requests.post(f"{Urls.MAIN_URL}/api/v1/courier/login", json=payload, timeout=10)
 
         assert response.status_code == 404
-        assert response.json()['message'] == "Учетная запись не найдена"
+        assert response.json()['message'] == ErrorMessage.LOGIN_NOT_EXISTS
 
     @allure.title('Проверка, что система вернёт ошибку, если неправильно указать логин или пароль, неправильный логин')
     def test_check_courier_invalid_login(self, courier):
@@ -60,7 +61,7 @@ class TestLoginCourier:
         response = requests.post(f"{Urls.MAIN_URL}/api/v1/courier/login", json=payload, timeout=10)
 
         assert response.status_code == 404
-        assert response.json()['message'] == "Учетная запись не найдена"
+        assert response.json()['message'] == ErrorMessage.LOGIN_NOT_EXISTS
 
     @allure.title('Проверка, что система вернёт ошибку, если неправильно указать логин или пароль, неправильный пароль')
     def test_check_courier_invalid_password(self, courier):
@@ -68,4 +69,4 @@ class TestLoginCourier:
         response = requests.post(f"{Urls.MAIN_URL}/api/v1/courier/login", json=payload, timeout=10)
 
         assert response.status_code == 404
-        assert response.json()['message'] == "Учетная запись не найдена"
+        assert response.json()['message'] == ErrorMessage.LOGIN_NOT_EXISTS

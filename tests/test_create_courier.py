@@ -7,6 +7,7 @@ import allure
 
 from data import Urls
 from conftest import _random_string, create_courier
+from error_message import ErrorMessage
 
 
 class TestCreateCourier:
@@ -32,7 +33,7 @@ class TestCreateCourier:
         response_duplicate = requests.post(f"{Urls.MAIN_URL}/api/v1/courier", json=payload, timeout=10)
 
         assert response_duplicate.status_code == 409
-        assert response_duplicate.json()['message'] == "Этот логин уже используется. Попробуйте другой."
+        assert response_duplicate.json()['message'] == ErrorMessage.LOGIG_ALERADY_EXIST
 
     @allure.title('Проверка, что если нету пароля, запрос возвращает ошибку')
     def test_create_courier_missing_password(self):
@@ -43,7 +44,7 @@ class TestCreateCourier:
 
         })
         assert response.status_code == 400
-        assert response.json()['message'] == "Недостаточно данных для создания учетной записи"
+        assert response.json()['message'] == ErrorMessage.LOGIN_NOT_ENOUGH
 
     @allure.title('Проверка, что если нету логина, запрос возвращает ошибку')
     def test_create_courier_missing_login(self):
@@ -53,7 +54,7 @@ class TestCreateCourier:
 
         })
         assert response.status_code == 400
-        assert response.json()['message'] == "Недостаточно данных для создания учетной записи"
+        assert response.json()['message'] == ErrorMessage.LOGIN_NOT_ENOUGH
 
     @allure.title('Проверка, что если нету пароля, запрос возвращает ошибку')
     def test_create_courier_missing_login_password(self):
@@ -63,4 +64,4 @@ class TestCreateCourier:
 
         })
         assert response.status_code == 400
-        assert response.json()['message'] == "Недостаточно данных для создания учетной записи"
+        assert response.json()['message'] == ErrorMessage.LOGIN_NOT_ENOUGH
