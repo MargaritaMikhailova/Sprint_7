@@ -9,7 +9,7 @@ from data import Urls
 from conftest import _random_string, create_courier
 
 
-class TestCreateCourier():
+class TestCreateCourier:
 
     @allure.title('Проверка, что курьера можно создать')
     def test_create_courier_successful(self):

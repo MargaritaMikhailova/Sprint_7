@@ -9,7 +9,7 @@ from data import Urls
 from conftest import login_courier
 
 
-class TestLoginCourier():
+class TestLoginCourier:
 
     @allure.title('Проверка, что курьер может авторизоваться')
     def test_login_courier_successful(self, courier):

@@ -6,7 +6,7 @@ from data import Urls
 from conftest import cancel_order
 
 
-class TestCreateOrder():
+class TestCreateOrder:
 
     @allure.title('Проверка, создание заказа')
     @pytest.mark.parametrize('color', [['BLACK'], ['GREY'], ['BLACK', 'GREY'], [], None])

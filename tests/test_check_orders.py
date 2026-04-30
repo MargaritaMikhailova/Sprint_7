@@ -5,7 +5,7 @@ import allure
 from data import Urls
 
 
-class TestCheckOrder():
+class TestCheckOrder:
 
     @allure.title('Проверка, что в тело ответа возвращается список заказов.')
     def test_check_order_exists(self):
